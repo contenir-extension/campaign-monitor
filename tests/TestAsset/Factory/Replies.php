@@ -17,6 +17,29 @@ use const JSON_THROW_ON_ERROR;
 final class Replies
 {
     /**
+     * The client's details, as GET clients/{id}.json gives them.
+     */
+    public static function client(string $name = 'Studio Esteta'): ResponseInterface
+    {
+        return self::json(200, ['BasicDetails' => ['ClientID' => Apis::CLIENT, 'CompanyName' => $name]]);
+    }
+
+    /**
+     * The clients a key reaches, as GET clients.json gives them: name by id.
+     *
+     * @param array<string, string> $clients
+     */
+    public static function clients(array $clients): ResponseInterface
+    {
+        $rows = [];
+        foreach ($clients as $id => $name) {
+            $rows[] = ['ClientID' => $id, 'Name' => $name];
+        }
+
+        return self::json(200, $rows);
+    }
+
+    /**
      * An error, with Campaign Monitor's code and message.
      *
      * @param array<string, string> $headers
@@ -68,9 +91,47 @@ final class Replies
         );
     }
 
+    /**
+     * A client's lists, as GET clients/{id}/lists.json gives them: name by id.
+     *
+     * @param array<string, string> $lists
+     */
+    public static function lists(array $lists): ResponseInterface
+    {
+        $rows = [];
+        foreach ($lists as $id => $name) {
+            $rows[] = ['ListID' => $id, 'Name' => $name];
+        }
+
+        return self::json(200, $rows);
+    }
+
     public static function ok(): ResponseInterface
     {
         return new Response(200);
+    }
+
+    /**
+     * The 401 Campaign Monitor gives for a key it doesn't know.
+     */
+    public static function refused(): ResponseInterface
+    {
+        return self::error(401, 50, 'Must supply a valid HTTP Basic Authorization header');
+    }
+
+    /**
+     * A list's webhooks, as GET lists/{id}/webhooks.json gives them: status by id.
+     *
+     * @param array<string, string> $webhooks
+     */
+    public static function webhooks(array $webhooks): ResponseInterface
+    {
+        $rows = [];
+        foreach ($webhooks as $id => $status) {
+            $rows[] = ['WebhookID' => $id, 'Events' => ['Deactivate'], 'Url' => 'https://x', 'Status' => $status];
+        }
+
+        return self::json(200, $rows);
     }
 
     /**
