@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-        "contenir/contenir-audience": "dev-feature/webhook-store as 0.1.x-dev",
+        "contenir/contenir-audience": "^0.1",
         "contenir/contenir-extension-api": "^0.7.5",
         "guzzlehttp/guzzle": "^7.9",
         "php-db/phpdb": "^0.6.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "400f010d17d8fd9e6e09b0f28b4362db",
+    "content-hash": "fabe78b6838839fc9783ac5e8ec4df34",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -57,16 +57,16 @@
         },
         {
             "name": "contenir/contenir-audience",
-            "version": "dev-feature/webhook-store",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-audience.git",
-                "reference": "0b279899510b9e8865f633a1683752cbdca38f7e"
+                "reference": "f56a737e4044705d5a72b0b59a5ae90bc9add080"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-audience/zipball/0b279899510b9e8865f633a1683752cbdca38f7e",
-                "reference": "0b279899510b9e8865f633a1683752cbdca38f7e",
+                "url": "https://api.github.com/repos/contenir/contenir-audience/zipball/f56a737e4044705d5a72b0b59a5ae90bc9add080",
+                "reference": "f56a737e4044705d5a72b0b59a5ae90bc9add080",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +151,7 @@
                 "issues": "https://github.com/contenir/contenir-audience/issues",
                 "source": "https://github.com/contenir/contenir-audience"
             },
-            "time": "2026-11-04T04:13:50+00:00"
+            "time": "2026-11-04T04:47:26+00:00"
         },
         {
             "name": "contenir/contenir-extension-api",
@@ -5592,17 +5592,9 @@
             "time": "2026-10-05T23:14:19+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "contenir/contenir-audience",
-            "version": "dev-feature/webhook-store",
-            "alias": "0.1.x-dev",
-            "alias_normalized": "0.1.9999999.9999999-dev"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "contenir/contenir-audience": 20,
         "contenir/contenir-qa-tools": 20,
         "php-db/phpdb-sqlite": 20
     },
