@@ -1,0 +1,83 @@
+{
+    "name": "contenir-extension/campaign-monitor",
+    "description": "The Campaign Monitor add-on for Contenir CMS: keeps a Campaign Monitor list in step with the site's sign-ups and records, through an outbox, and hears back about unsubscribes and bounces.",
+    "type": "contenir-extension",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "contenir",
+        "contenir-extension",
+        "campaign-monitor",
+        "newsletter",
+        "mailing-list"
+    ],
+    "support": {
+        "issues": "https://github.com/contenir-extension/campaign-monitor/issues",
+        "source": "https://github.com/contenir-extension/campaign-monitor"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/contenir/contenir-audience"
+        }
+    ],
+    "require": {
+        "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+        "contenir/contenir-audience": "^0.1",
+        "guzzlehttp/guzzle": "^7.9",
+        "psr/http-client": "^1.0.3",
+        "psr/http-factory": "^1.1",
+        "psr/http-message": "^1.1 || ^2.0"
+    },
+    "require-dev": {
+        "contenir/contenir-qa-tools": "0.1.x-dev",
+        "infection/infection": "^0.34.1",
+        "nyholm/psr7": "^1.8.2",
+        "phpunit/phpunit": "^11.5.42"
+    },
+    "autoload": {
+        "psr-4": {
+            "Contenir\\Extension\\CampaignMonitor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Contenir\\Extension\\CampaignMonitor\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@static-analysis",
+            "@test",
+            "@mutation-test"
+        ],
+        "cs-check": [
+            "mago format --check",
+            "mago lint"
+        ],
+        "cs-fix": [
+            "mago format",
+            "mago lint --fix"
+        ],
+        "static-analysis": "mago analyze",
+        "test": "phpunit --colors=always --testsuite unit",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "mutation-test": "infection"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.3.99"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
