@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-11-04
+
+### Changed
+
+- Accepts contenir/contenir-extension-api 0.8 as well as 0.7, so the CMS can host 0.8. 0.8's changes are
+  additions for add-ons, and only hosts must implement the new methods.
+
 ## [0.1.0] - 2026-11-04
 
 ### Added

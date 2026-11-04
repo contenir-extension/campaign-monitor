@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fabe78b6838839fc9783ac5e8ec4df34",
+    "content-hash": "79107cc967bfb68e07fb0bb35d9ba0cb",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -155,16 +155,16 @@
         },
         {
             "name": "contenir/contenir-extension-api",
-            "version": "v0.7.5",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-extension-api.git",
-                "reference": "889910de717118c95dac317e395a098b0fbd08bc"
+                "reference": "5e85dd64c0a6b250fb208056d2b04a672b5c7033"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-extension-api/zipball/889910de717118c95dac317e395a098b0fbd08bc",
-                "reference": "889910de717118c95dac317e395a098b0fbd08bc",
+                "url": "https://api.github.com/repos/contenir/contenir-extension-api/zipball/5e85dd64c0a6b250fb208056d2b04a672b5c7033",
+                "reference": "5e85dd64c0a6b250fb208056d2b04a672b5c7033",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.7.x-dev"
+                    "dev-main": "0.8.x-dev"
                 }
             },
             "autoload": {
@@ -223,7 +223,7 @@
                 "issues": "https://github.com/contenir/contenir-extension-api/issues",
                 "source": "https://github.com/contenir/contenir-extension-api"
             },
-            "time": "2026-10-28T09:19:42+00:00"
+            "time": "2026-11-04T10:23:48+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
