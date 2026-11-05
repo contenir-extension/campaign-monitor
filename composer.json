@@ -23,7 +23,7 @@
     "require": {
         "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
         "contenir/contenir-audience": "^0.1",
-        "contenir/contenir-extension-api": "^0.7.5 || ^0.8",
+        "contenir/contenir-extension-api": "^0.7.5 || ^0.8 || ^0.9",
         "guzzlehttp/guzzle": "^7.9",
         "php-db/phpdb": "^0.6.0",
         "psr/clock": "^1.0",

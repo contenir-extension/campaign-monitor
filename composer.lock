@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79107cc967bfb68e07fb0bb35d9ba0cb",
+    "content-hash": "80552420e5fb7224da6c4e092acd985d",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -155,16 +155,16 @@
         },
         {
             "name": "contenir/contenir-extension-api",
-            "version": "v0.8.0",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-extension-api.git",
-                "reference": "5e85dd64c0a6b250fb208056d2b04a672b5c7033"
+                "reference": "da3d44e416365f45ab5f91ad8998f4c714260baf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-extension-api/zipball/5e85dd64c0a6b250fb208056d2b04a672b5c7033",
-                "reference": "5e85dd64c0a6b250fb208056d2b04a672b5c7033",
+                "url": "https://api.github.com/repos/contenir/contenir-extension-api/zipball/da3d44e416365f45ab5f91ad8998f4c714260baf",
+                "reference": "da3d44e416365f45ab5f91ad8998f4c714260baf",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "issues": "https://github.com/contenir/contenir-extension-api/issues",
                 "source": "https://github.com/contenir/contenir-extension-api"
             },
-            "time": "2026-11-04T10:23:48+00:00"
+            "time": "2026-11-05T01:01:47+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -5051,16 +5051,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v7.4.21",
+            "version": "v7.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "fd0e3462be6d32a0d130e8423e4940a7688162d8"
+                "reference": "53d609da66578dad5a39fe290e8f924ec8f05e93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/fd0e3462be6d32a0d130e8423e4940a7688162d8",
-                "reference": "fd0e3462be6d32a0d130e8423e4940a7688162d8",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/53d609da66578dad5a39fe290e8f924ec8f05e93",
+                "reference": "53d609da66578dad5a39fe290e8f924ec8f05e93",
                 "shasum": ""
             },
             "require": {
@@ -5097,7 +5097,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v7.4.21"
+                "source": "https://github.com/symfony/filesystem/tree/v7.4.23"
             },
             "funding": [
                 {
@@ -5117,7 +5117,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-06T20:05:19+00:00"
+            "time": "2026-11-04T08:27:22+00:00"
         },
         {
             "name": "symfony/finder",
