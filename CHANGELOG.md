@@ -8,13 +8,18 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- The setup check's Make a pepper button: a one-click fix that writes a fresh pepper into
+- The API key and the client are saved together (#5). The Client list fills from the API key as it is typed, from the
+  new `clients` endpoint, and a key Campaign Monitor refuses is said beside the field before saving.
+- A one-click Fix on the setup check (Make a pepper) that writes a fresh pepper into
   `config/autoload/extensions/campaign-monitor.local.php`, where the CMS and the site both read it. It never replaces a
   pepper already set, in either config file, and says so when the file can't be written. Other setup problems keep the
   guide with a pepper to copy.
 
 ### Changed
 
+- The client is a text field holding the client's ID, which the add-on's script shows as a list. The CMS's select
+  accepted only the clients of the key already saved, so a new key and its client could never be saved in one go.
+  Without the script, the field takes the 32-character client ID.
 - A missing pepper is explained in plain words: what it is for, and that sign-ups can't be synced without it.
 
 ## [0.1.2] - 2026-11-05

@@ -12,7 +12,7 @@ runner sends it within the minute, so a slow or failing Campaign Monitor never s
 1. Enable the add-on. Its tables are created at the next sign-in, in the site's database, under `ext_campaign_monitor_`.
 2. Write the add-on's config file. `config/autoload/extensions/campaign-monitor.global.php` holds the bindings, and
    `campaign-monitor.local.php`, never committed, the pepper the email hashes are made with. Until there is one, the
-   update check's Make a pepper button writes a fresh one into `campaign-monitor.local.php`. It never replaces one
+   setup check's one-click Fix writes a fresh one into `campaign-monitor.local.php`. It never replaces one
    already set: a new pepper would forget everyone who unsubscribed. A Mezzio site that signs people up through
    [contenir-audience-mezzio](https://github.com/contenir/contenir-audience-mezzio) reads the same two files, so it
    uses the same pepper. Another environment that syncs the same lists needs the same pepper copied to its own
@@ -38,8 +38,11 @@ runner sends it within the minute, so a slow or failing Campaign Monitor never s
    ]]]];
    ```
 
-3. In Site Settings > Integration > Campaign Monitor, enter the API key, save, choose the client, save, and press Test
-   connection.
+3. In Site Settings > Integration > Campaign Monitor, enter the API key. The Client list fills from it as soon as you
+   leave the field, or says beside the field that Campaign Monitor refused the key. Choose the client, save, and press
+   Test connection. Later, leave the API key empty to keep the saved one, as the CMS does for any password field, and
+   change the client.
+
 4. For a section binding, bind the listeners in the section's `admin.xml`:
 
    ```xml
@@ -58,6 +61,8 @@ runner sends it within the minute, so a slow or failing Campaign Monitor never s
 | Extension point | What |
 |---|---|
 | Settings section | Integration > Campaign Monitor: the API key (masked, in local settings), the client, chosen from those the key reaches, and the webhook's secret (masked). Buttons: Test connection, Sync all now, Re-register webhooks. |
+| Field type and script | `client`: the client's ID, which `public/js/client-field.js` shows as a list of the clients the API key reaches, filled as the key is typed. Without the script it is a text field for the 32-character ID. |
+| Endpoint | `clients`, at `/admin/extension/campaign-monitor/clients`, for editors who may update it: a GET answering the clients a key reaches as JSON. The key comes in the `X-Campaign-Monitor-Key` header, never the address; without one, the saved key is asked. A refused key answers 422 with Campaign Monitor's reason. |
 | Listeners | `sync-record` on `RecordPostSave` and `remove-record` on `RecordPostDelete`, run as the record is saved, since writing a row is quick. |
 | Schedule | `drain`, every minute: sends what's due for up to 40 seconds, then deletes sent messages after 7 days and failed ones after 30. |
 | Webhook | `events`, at `/api/extension/campaign-monitor/events?binding=<name>&key=<secret>`. A call without the secret is refused before anything runs, and a call for another list is refused too (CMN-2). |

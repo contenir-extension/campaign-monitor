@@ -82,8 +82,9 @@ final class CampaignMonitorSectionTest extends TestCase
     {
         static::assertSame(
             [
-                'From Campaign Monitor under Account settings > API keys. Kept in this environment\'s local settings.',
-                'The client whose lists the site keeps. Save the API key first to choose one.',
+                'From Campaign Monitor under Account settings > API keys. Kept in this environment\'s local settings.'
+                    . ' Leave it empty to keep the saved key.',
+                'The client whose lists the site keeps, listed from the API key as you enter it.',
                 'Made by Re-register webhooks, and part of the address Campaign Monitor calls. Clear it and'
                     . ' re-register to change it.',
             ],
