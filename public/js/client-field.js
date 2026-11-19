@@ -97,8 +97,12 @@ export default class CampaignMonitorClientField {
 
         const key = keyField(input.form)
         const select = document.createElement('select')
-        select.className = 'form__control form__control--select'
+        select.className = 'select'
         select.id = input.id
+        const describedBy = input.getAttribute('aria-describedby')
+        if (describedBy) {
+            select.setAttribute('aria-describedby', describedBy)
+        }
         input.id = `${input.id}-value`
         input.type = 'hidden'
         input.after(select)
