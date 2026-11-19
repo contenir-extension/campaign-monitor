@@ -4,6 +4,21 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- The API key and the client are saved together (#5). The Client list fills from the API key as it is typed, from the
+  new `clients` endpoint, and a key Campaign Monitor refuses is said beside the field before saving.
+- `keep-api-key`, on `SettingsPreSave`: an empty API key field keeps the saved key, so the client can be changed
+  without typing the key again. A site binds it in its `admin.xml` until the CMS keeps empty secrets itself.
+
+### Changed
+
+- The client is a text field holding the client's ID, which the add-on's script shows as a list. The CMS's select
+  accepted only the clients of the key already saved, so a new key and its client could never be saved in one go.
+  Without the script, the field takes the 32-character client ID.
+
 ## [0.1.2] - 2026-11-05
 
 ### Changed

@@ -6,6 +6,7 @@ namespace Contenir\Extension\CampaignMonitor\Tests\Unit;
 
 use Contenir\Extension\Api\Event\Record\RecordPostDelete;
 use Contenir\Extension\Api\Event\Record\RecordPostSave;
+use Contenir\Extension\Api\Event\Settings\SettingsPreSave;
 use Contenir\Extension\Api\Handler\Privilege;
 use Contenir\Extension\Api\Listener\Delivery;
 use Contenir\Extension\Api\Listener\ListenerDeclaration;
@@ -17,8 +18,11 @@ use Contenir\Extension\CampaignMonitor\Check\ConnectionCheck;
 use Contenir\Extension\CampaignMonitor\Check\OutboxCheck;
 use Contenir\Extension\CampaignMonitor\Check\SetupCheck;
 use Contenir\Extension\CampaignMonitor\Check\WebhookCheck;
+use Contenir\Extension\CampaignMonitor\Field\ClientField;
 use Contenir\Extension\CampaignMonitor\Handler\BindingsScreen;
+use Contenir\Extension\CampaignMonitor\Handler\ClientsLookup;
 use Contenir\Extension\CampaignMonitor\Handler\SyncScreen;
+use Contenir\Extension\CampaignMonitor\Listener\KeepStoredKey;
 use Contenir\Extension\CampaignMonitor\Listener\RemoveRecord;
 use Contenir\Extension\CampaignMonitor\Listener\SyncRecord;
 use Contenir\Extension\CampaignMonitor\Schedule\Drain;
@@ -30,6 +34,7 @@ use PHPUnit\Framework\TestCase;
 use function array_keys;
 use function array_map;
 use function dirname;
+use function is_file;
 
 #[Group('unit')]
 final class CampaignMonitorExtensionTest extends TestCase
@@ -80,12 +85,13 @@ final class CampaignMonitorExtensionTest extends TestCase
     }
 
     #[Test]
-    public function hearsSavesAndDeletesAtOnceSoTheOutboxIsWrittenWithTheRecord(): void
+    public function hearsSavesAndDeletesAtOnceAndKeepsTheSavedKey(): void
     {
         static::assertSame(
             [
-                ['sync-record',   RecordPostSave::class,   SyncRecord::class,   Delivery::Immediate],
-                ['remove-record', RecordPostDelete::class, RemoveRecord::class, Delivery::Immediate],
+                ['sync-record',   RecordPostSave::class,   SyncRecord::class,    Delivery::Immediate],
+                ['remove-record', RecordPostDelete::class, RemoveRecord::class,  Delivery::Immediate],
+                ['keep-api-key',  SettingsPreSave::class,  KeepStoredKey::class, Delivery::Immediate],
             ],
             array_map(
                 static fn(ListenerDeclaration $listener): array => [
@@ -100,18 +106,20 @@ final class CampaignMonitorExtensionTest extends TestCase
     }
 
     #[Test]
-    public function offersTheSyncAndBindingsScreens(): void
+    public function offersTheClientsLookupAndTheSyncAndBindingsScreens(): void
     {
         $handlers = self::registration()->handlers;
 
         static::assertSame(
             [
-                ['sync',                'bindings'],
-                [SyncScreen::class,     null],
+                ['clients', 'sync', 'bindings'],
+                [ClientsLookup::class, Privilege::Update],
+                [SyncScreen::class, null],
                 [BindingsScreen::class, Privilege::View],
             ],
             [
                 array_keys($handlers),
+                [$handlers['clients']->class, $handlers['clients']->privilege],
                 [$handlers['sync']->class, $handlers['sync']->privilege],
                 [$handlers['bindings']->class, $handlers['bindings']->privilege],
             ],
@@ -140,6 +148,28 @@ final class CampaignMonitorExtensionTest extends TestCase
                 ['campaign-monitor:client'],
             ],
             [array_keys($registration->settingsSections), array_keys($registration->fieldTypes)],
+        );
+    }
+
+    #[Test]
+    public function shipsTheScriptThatFillsTheClientList(): void
+    {
+        $module = self::registration()->module;
+
+        static::assertSame(
+            [
+                dirname(__DIR__, levels: 2) . '/public',
+                [[ClientField::COMPONENT, CampaignMonitorExtension::CLIENT_SCRIPT]],
+                true,
+            ],
+            [
+                $module->assets,
+                array_map(static fn($component): array => [
+                    $component->selector,
+                    $component->script,
+                ], $module->components),
+                is_file(dirname(__DIR__, levels: 2) . '/public/' . CampaignMonitorExtension::CLIENT_SCRIPT),
+            ],
         );
     }
 }

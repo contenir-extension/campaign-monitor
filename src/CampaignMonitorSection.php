@@ -59,13 +59,13 @@ final class CampaignMonitorSection
                         name: self::API_KEY,
                         label: 'API key',
                         description: 'From Campaign Monitor under Account settings > API keys. Kept in this'
-                            . ' environment\'s local settings.',
+                            . ' environment\'s local settings. Leave it empty to keep the saved key.',
                     ),
                     new Field(
                         name: self::CLIENT,
                         label: 'Client',
                         type: $handle->fieldType(ClientField::NAME),
-                        description: 'The client whose lists the site keeps. Save the API key first to choose one.',
+                        description: 'The client whose lists the site keeps, listed from the API key as you enter it.',
                     ),
                     Field::password(
                         name: self::WEBHOOK_SECRET,
