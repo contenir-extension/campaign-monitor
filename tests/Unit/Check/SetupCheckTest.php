@@ -6,7 +6,9 @@ namespace Contenir\Extension\CampaignMonitor\Tests\Unit\Check;
 
 use Contenir\Extension\Api\Diagnostic\CopyText;
 use Contenir\Extension\Api\Diagnostic\GuidedFix;
+use Contenir\Extension\Api\Diagnostic\OneClickFix;
 use Contenir\Extension\Api\Diagnostic\Status;
+use Contenir\Extension\CampaignMonitor\Check\AddPepper;
 use Contenir\Extension\CampaignMonitor\Check\SetupCheck;
 use Contenir\Extension\CampaignMonitor\Sync\Secrets;
 use Contenir\Extension\CampaignMonitor\Tests\TestAsset\Context\Contexts;
@@ -39,10 +41,10 @@ final class SetupCheckTest extends TestCase
     }
 
     #[Test]
-    public function failsWithAFreshPepperToCopyUntilTheSiteIsSetUp(): void
+    public function guidesThroughTheConfigFileWhenSomethingElseIsWrong(): void
     {
         $result = (new SetupCheck(
-            FakeSyncFactory::notReady('No pepper.'),
+            FakeSyncFactory::notReady('The bindings in the add-on\'s config file must be a list.'),
             new Secrets(static fn(int $bytes): string => str_repeat("\x01", $bytes)),
         ))->check(Contexts::make());
         $fix = $result->fix;
@@ -50,7 +52,7 @@ final class SetupCheckTest extends TestCase
         static::assertEquals(
             [
                 Status::Failure,
-                'No pepper.',
+                'The bindings in the add-on\'s config file must be a list.',
                 'How to set up the config file',
                 [new CopyText('A new pepper', str_repeat('01', times: 32))],
                 'The site\'s config/autoload/extensions/campaign-monitor.global.php holds the bindings, and'
@@ -72,6 +74,22 @@ final class SetupCheckTest extends TestCase
     public function isLabelledForTheUpdateCheck(): void
     {
         static::assertSame('Campaign Monitor setup', (new SetupCheck())->label());
+    }
+
+    #[Test]
+    public function makesAPepperWithOneClickWhenNoneIsSet(): void
+    {
+        $result = (new SetupCheck(FakeSyncFactory::notReady()))->check(Contexts::make());
+
+        static::assertEquals(
+            [
+                Status::Failure,
+                'No pepper is set, so sign-ups can\'t be synced yet. The pepper is a secret that keeps the addresses of'
+                    . ' people who unsubscribed unreadable in the site\'s database.',
+                new OneClickFix('Make a pepper', AddPepper::class),
+            ],
+            [$result->status, $result->message, $result->fix],
+        );
     }
 
     #[Test]

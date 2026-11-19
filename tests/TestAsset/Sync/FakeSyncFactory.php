@@ -17,10 +17,13 @@ final readonly class FakeSyncFactory implements SyncFactoryInterface
 {
     public function __construct(
         private ?Sync $sync,
-        private string $reason = 'The add-on\'s config file has no pepper to hash email addresses with.',
+        private ?string $reason = null,
     ) {}
 
-    public static function notReady(string $reason = 'The add-on\'s config file has no pepper to hash email addresses with.'): self
+    /**
+     * Not ready for $reason, or for want of a pepper when none is given.
+     */
+    public static function notReady(?string $reason = null): self
     {
         return new self(null, $reason);
     }
@@ -28,6 +31,6 @@ final readonly class FakeSyncFactory implements SyncFactoryInterface
     #[Override]
     public function of(ExtensionContextInterface $context): Sync
     {
-        return $this->sync ?? throw NotReady::because($this->reason);
+        return $this->sync ?? throw null === $this->reason ? NotReady::noPepper() : NotReady::because($this->reason);
     }
 }

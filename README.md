@@ -11,10 +11,15 @@ runner sends it within the minute, so a slow or failing Campaign Monitor never s
 
 1. Enable the add-on. Its tables are created at the next sign-in, in the site's database, under `ext_campaign_monitor_`.
 2. Write the add-on's config file. `config/autoload/extensions/campaign-monitor.global.php` holds the bindings, and
-   `campaign-monitor.local.php`, never committed, the pepper the email hashes are made with. The update check offers a
-   fresh pepper to copy. A Mezzio site that signs people up through
-   [contenir-audience-mezzio](https://github.com/contenir/contenir-audience-mezzio) reads the same two files and must
-   use the same pepper.
+   `campaign-monitor.local.php`, never committed, the pepper the email hashes are made with. Until there is one, the
+   update check's Make a pepper button writes a fresh one into `campaign-monitor.local.php`. It never replaces one
+   already set: a new pepper would forget everyone who unsubscribed. A Mezzio site that signs people up through
+   [contenir-audience-mezzio](https://github.com/contenir/contenir-audience-mezzio) reads the same two files, so it
+   uses the same pepper. Another environment that syncs the same lists needs the same pepper copied to its own
+   `campaign-monitor.local.php`.
+
+   The pepper is a secret mixed into the hashes of the addresses kept for people who unsubscribed, bounced or
+   complained, so the database never holds a readable list of them.
 
    ```php
    return ['extensions' => ['campaign-monitor' => ['bindings' => [
@@ -58,7 +63,7 @@ runner sends it within the minute, so a slow or failing Campaign Monitor never s
 | Webhook | `events`, at `/api/extension/campaign-monitor/events?binding=<name>&key=<secret>`. A call without the secret is refused before anything runs, and a call for another list is refused too (CMN-2). |
 | Migrations | The library's outbox, sync state, suppression, consent and webhook tables, under `ext_campaign_monitor_`, on the site's database. |
 | Screens | Sync, at `/admin/extension/campaign-monitor/sync`: the counts, and the dead, failed and waiting messages with their last error, to retry or remove. Bindings, at `/admin/extension/campaign-monitor/bindings`: read-only, exactly what each binding sends. |
-| Checks | Setup (config file and pepper), connection (with a way to the settings when the key is refused), the outbox (failed and dead messages) and the webhooks (not registered, deleted or switched off at Campaign Monitor). |
+| Checks | Setup (config file and pepper, with a one-click fix that makes the pepper), connection (with a way to the settings when the key is refused), the outbox (failed and dead messages) and the webhooks (not registered, deleted or switched off at Campaign Monitor). |
 
 ### What a saved record does
 

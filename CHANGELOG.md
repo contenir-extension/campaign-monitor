@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- The setup check's Make a pepper button: a one-click fix that writes a fresh pepper into
+  `config/autoload/extensions/campaign-monitor.local.php`, where the CMS and the site both read it. It never replaces a
+  pepper already set, in either config file, and says so when the file can't be written. Other setup problems keep the
+  guide with a pepper to copy.
+
+### Changed
+
+- A missing pepper is explained in plain words: what it is for, and that sign-ups can't be synced without it.
+
 ## [0.1.2] - 2026-11-05
 
 ### Changed
