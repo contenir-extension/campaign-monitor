@@ -6,7 +6,6 @@ namespace Contenir\Extension\CampaignMonitor;
 
 use Contenir\Extension\Api\Event\Record\RecordPostDelete;
 use Contenir\Extension\Api\Event\Record\RecordPostSave;
-use Contenir\Extension\Api\Event\Settings\SettingsPreSave;
 use Contenir\Extension\Api\ExtensionInterface;
 use Contenir\Extension\Api\Handler\Privilege;
 use Contenir\Extension\Api\Listener\Delivery;
@@ -20,7 +19,6 @@ use Contenir\Extension\CampaignMonitor\Field\ClientField;
 use Contenir\Extension\CampaignMonitor\Handler\BindingsScreen;
 use Contenir\Extension\CampaignMonitor\Handler\ClientsLookup;
 use Contenir\Extension\CampaignMonitor\Handler\SyncScreen;
-use Contenir\Extension\CampaignMonitor\Listener\KeepStoredKey;
 use Contenir\Extension\CampaignMonitor\Listener\RemoveRecord;
 use Contenir\Extension\CampaignMonitor\Listener\SyncRecord;
 use Contenir\Extension\CampaignMonitor\Schedule\Drain;
@@ -71,7 +69,6 @@ final class CampaignMonitorExtension implements ExtensionInterface
             RemoveRecord::class,
             delivery: Delivery::Immediate,
         );
-        $registry->listen(KeepStoredKey::NAME, SettingsPreSave::class, KeepStoredKey::class);
         $registry->schedule(Drain::NAME, Drain::class, Frequency::everyMinutes(1));
         $registry->webhook(WebhookAddress::NAME, EventsWebhook::class);
         $registry->migrations(__DIR__ . '/Schema', self::SCHEMA);

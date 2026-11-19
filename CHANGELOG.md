@@ -10,8 +10,6 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 - The API key and the client are saved together (#5). The Client list fills from the API key as it is typed, from the
   new `clients` endpoint, and a key Campaign Monitor refuses is said beside the field before saving.
-- `keep-api-key`, on `SettingsPreSave`: an empty API key field keeps the saved key, so the client can be changed
-  without typing the key again. A site binds it in its `admin.xml` until the CMS keeps empty secrets itself.
 
 ### Changed
 

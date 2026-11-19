@@ -6,7 +6,6 @@ namespace Contenir\Extension\CampaignMonitor\Tests\Unit;
 
 use Contenir\Extension\Api\Event\Record\RecordPostDelete;
 use Contenir\Extension\Api\Event\Record\RecordPostSave;
-use Contenir\Extension\Api\Event\Settings\SettingsPreSave;
 use Contenir\Extension\Api\Handler\Privilege;
 use Contenir\Extension\Api\Listener\Delivery;
 use Contenir\Extension\Api\Listener\ListenerDeclaration;
@@ -22,7 +21,6 @@ use Contenir\Extension\CampaignMonitor\Field\ClientField;
 use Contenir\Extension\CampaignMonitor\Handler\BindingsScreen;
 use Contenir\Extension\CampaignMonitor\Handler\ClientsLookup;
 use Contenir\Extension\CampaignMonitor\Handler\SyncScreen;
-use Contenir\Extension\CampaignMonitor\Listener\KeepStoredKey;
 use Contenir\Extension\CampaignMonitor\Listener\RemoveRecord;
 use Contenir\Extension\CampaignMonitor\Listener\SyncRecord;
 use Contenir\Extension\CampaignMonitor\Schedule\Drain;
@@ -85,13 +83,12 @@ final class CampaignMonitorExtensionTest extends TestCase
     }
 
     #[Test]
-    public function hearsSavesAndDeletesAtOnceAndKeepsTheSavedKey(): void
+    public function hearsSavesAndDeletesAtOnceSoTheOutboxIsWrittenWithTheRecord(): void
     {
         static::assertSame(
             [
-                ['sync-record',   RecordPostSave::class,   SyncRecord::class,    Delivery::Immediate],
-                ['remove-record', RecordPostDelete::class, RemoveRecord::class,  Delivery::Immediate],
-                ['keep-api-key',  SettingsPreSave::class,  KeepStoredKey::class, Delivery::Immediate],
+                ['sync-record',   RecordPostSave::class,   SyncRecord::class,   Delivery::Immediate],
+                ['remove-record', RecordPostDelete::class, RemoveRecord::class, Delivery::Immediate],
             ],
             array_map(
                 static fn(ListenerDeclaration $listener): array => [

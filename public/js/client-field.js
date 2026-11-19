@@ -32,13 +32,17 @@ export function endpoint(location) {
 }
 
 /**
- * The API key field in the same form, named api_key, or ending [api_key] when the form nests its fields.
+ * The API key field in the same form. The CMS draws a password as its new-value box, api_key_chk, which it leaves
+ * the saved key alone when blank; api_key, or a name ending [api_key] or [api_key_chk], is taken too.
  *
  * @param {HTMLFormElement|null} form
  * @returns {HTMLInputElement|null}
  */
 export function keyField(form) {
-    return form?.querySelector(`input[name="${KEY_FIELD}"], input[name$="[${KEY_FIELD}]"]`) ?? null
+    const names = [KEY_FIELD, `${KEY_FIELD}_chk`]
+    const selector = names.flatMap((name) => [`input[name="${name}"]`, `input[name$="[${name}]"]`]).join(', ')
+
+    return form?.querySelector(selector) ?? null
 }
 
 /**
