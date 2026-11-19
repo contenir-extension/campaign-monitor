@@ -17,6 +17,7 @@ use Contenir\Extension\CampaignMonitor\Check\SetupCheck;
 use Contenir\Extension\CampaignMonitor\Check\WebhookCheck;
 use Contenir\Extension\CampaignMonitor\Field\ClientField;
 use Contenir\Extension\CampaignMonitor\Handler\BindingsScreen;
+use Contenir\Extension\CampaignMonitor\Handler\ClientsLookup;
 use Contenir\Extension\CampaignMonitor\Handler\SyncScreen;
 use Contenir\Extension\CampaignMonitor\Listener\RemoveRecord;
 use Contenir\Extension\CampaignMonitor\Listener\SyncRecord;
@@ -25,10 +26,13 @@ use Contenir\Extension\CampaignMonitor\Sync\WebhookAddress;
 use Contenir\Extension\CampaignMonitor\Webhook\EventsWebhook;
 use Override;
 
+use function dirname;
+
 /**
  * The Campaign Monitor add-on: keeps a client's lists in step with the site's sign-ups and the
  * records a site binds, through an outbox drained every minute, and hears back about
- * unsubscribes, bounces and complaints through its webhook.
+ * unsubscribes, bounces and complaints through its webhook. Its settings take the API key and the client in one
+ * save: a script fills the Client list from the key as it is typed.
  *
  * @api
  */
@@ -45,10 +49,18 @@ final class CampaignMonitorExtension implements ExtensionInterface
      */
     public const string SCHEMA = __NAMESPACE__ . '\\Schema';
 
+    /**
+     * The script that fills the Client list from the API key as it is typed, within the add-on's public folder.
+     */
+    public const string CLIENT_SCRIPT = 'js/client-field.js';
+
     #[Override]
     public function register(Registry $registry): void
     {
         $registry->fieldType(ClientField::NAME, ClientField::class);
+        $registry->assets(dirname(__DIR__) . '/public');
+        $registry->component(ClientField::COMPONENT, self::CLIENT_SCRIPT);
+        $registry->handler(ClientsLookup::NAME, ClientsLookup::class, Privilege::Update);
         $registry->settingsSection(CampaignMonitorSection::define($registry->handle()));
         $registry->listen(SyncRecord::NAME, RecordPostSave::class, SyncRecord::class, delivery: Delivery::Immediate);
         $registry->listen(

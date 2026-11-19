@@ -17,7 +17,9 @@ use Contenir\Extension\CampaignMonitor\Check\ConnectionCheck;
 use Contenir\Extension\CampaignMonitor\Check\OutboxCheck;
 use Contenir\Extension\CampaignMonitor\Check\SetupCheck;
 use Contenir\Extension\CampaignMonitor\Check\WebhookCheck;
+use Contenir\Extension\CampaignMonitor\Field\ClientField;
 use Contenir\Extension\CampaignMonitor\Handler\BindingsScreen;
+use Contenir\Extension\CampaignMonitor\Handler\ClientsLookup;
 use Contenir\Extension\CampaignMonitor\Handler\SyncScreen;
 use Contenir\Extension\CampaignMonitor\Listener\RemoveRecord;
 use Contenir\Extension\CampaignMonitor\Listener\SyncRecord;
@@ -30,6 +32,7 @@ use PHPUnit\Framework\TestCase;
 use function array_keys;
 use function array_map;
 use function dirname;
+use function is_file;
 
 #[Group('unit')]
 final class CampaignMonitorExtensionTest extends TestCase
@@ -100,18 +103,20 @@ final class CampaignMonitorExtensionTest extends TestCase
     }
 
     #[Test]
-    public function offersTheSyncAndBindingsScreens(): void
+    public function offersTheClientsLookupAndTheSyncAndBindingsScreens(): void
     {
         $handlers = self::registration()->handlers;
 
         static::assertSame(
             [
-                ['sync',                'bindings'],
-                [SyncScreen::class,     null],
+                ['clients', 'sync', 'bindings'],
+                [ClientsLookup::class, Privilege::Update],
+                [SyncScreen::class, null],
                 [BindingsScreen::class, Privilege::View],
             ],
             [
                 array_keys($handlers),
+                [$handlers['clients']->class, $handlers['clients']->privilege],
                 [$handlers['sync']->class, $handlers['sync']->privilege],
                 [$handlers['bindings']->class, $handlers['bindings']->privilege],
             ],
@@ -140,6 +145,28 @@ final class CampaignMonitorExtensionTest extends TestCase
                 ['campaign-monitor:client'],
             ],
             [array_keys($registration->settingsSections), array_keys($registration->fieldTypes)],
+        );
+    }
+
+    #[Test]
+    public function shipsTheScriptThatFillsTheClientList(): void
+    {
+        $module = self::registration()->module;
+
+        static::assertSame(
+            [
+                dirname(__DIR__, levels: 2) . '/public',
+                [[ClientField::COMPONENT, CampaignMonitorExtension::CLIENT_SCRIPT]],
+                true,
+            ],
+            [
+                $module->assets,
+                array_map(static fn($component): array => [
+                    $component->selector,
+                    $component->script,
+                ], $module->components),
+                is_file(dirname(__DIR__, levels: 2) . '/public/' . CampaignMonitorExtension::CLIENT_SCRIPT),
+            ],
         );
     }
 }
