@@ -62,7 +62,7 @@ final readonly class DatabaseSyncFactory implements SyncFactoryInterface
     private static function hasher(?string $pepper): EmailHasher
     {
         if (null === $pepper) {
-            throw NotReady::because('The add-on\'s config file has no pepper to hash email addresses with.');
+            throw NotReady::noPepper();
         }
 
         try {

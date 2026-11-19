@@ -47,7 +47,7 @@ final class DatabaseSyncFactoryTest extends TestCase
         return [
             'no pepper'        => [
                 'other-addon',
-                'The add-on\'s config file has no pepper to hash email addresses with.',
+                'No pepper is set, so sign-ups can\'t be synced yet.',
             ],
             'a short pepper'   => [
                 'short-pepper',

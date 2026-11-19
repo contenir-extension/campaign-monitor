@@ -9,6 +9,7 @@ use Contenir\Extension\Api\Diagnostic\CheckInterface;
 use Contenir\Extension\Api\Diagnostic\CheckResult;
 use Contenir\Extension\Api\Diagnostic\CopyText;
 use Contenir\Extension\Api\Diagnostic\GuidedFix;
+use Contenir\Extension\Api\Diagnostic\OneClickFix;
 use Contenir\Extension\CampaignMonitor\Sync\DatabaseSyncFactory;
 use Contenir\Extension\CampaignMonitor\Sync\NotReady;
 use Contenir\Extension\CampaignMonitor\Sync\Secrets;
@@ -21,7 +22,8 @@ use function sprintf;
 
 /**
  * Whether the site is set up to sync: the add-on's config file has a pepper and bindings it can
- * read, and the site's database is lent. The fix explains the file and offers a fresh pepper.
+ * read, and the site's database is lent. A missing pepper is fixed with one click, which writes a fresh one into the
+ * add-on's local config file; anything else has a guide to the file, with a fresh pepper to copy.
  *
  * @api
  */
@@ -43,6 +45,10 @@ final readonly class SetupCheck implements CheckInterface
         try {
             $sync = $this->syncs->of($context);
         } catch (NotReady $e) {
+            if ($e->isNoPepper()) {
+                return CheckResult::failure($e->getMessage(), new OneClickFix('Make a pepper', AddPepper::class));
+            }
+
             return CheckResult::failure($e->getMessage(), new GuidedFix(
                 'How to set up the config file',
                 sprintf(
